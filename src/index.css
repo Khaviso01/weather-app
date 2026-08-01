@@ -85,7 +85,7 @@ button {
 .app-shell-card {
   position: relative;
   width: 100%;
-  max-width: 420px;
+  max-width: 600px;
   min-height: 720px;
   max-height: 900px;
   height: 92dvh;
@@ -205,7 +205,6 @@ button {
 .weather-hero {
   position: relative;
   background: var(--app-card);
-  border: 1px solid var(--app-border);
   border-radius: 1.5rem;
   padding: 1.5rem;
   overflow: hidden;
@@ -254,7 +253,6 @@ button {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   background: var(--app-card);
-  border: 1px solid var(--app-border);
   border-radius: 1.5rem;
   padding: 1.25rem 0.5rem;
   margin-top: 0.25rem;
@@ -266,10 +264,6 @@ button {
   align-items: center;
   gap: 0.35rem;
   padding: 0 0.5rem;
-}
-
-.stats-cell.with-border {
-  border-left: 1px solid var(--app-border);
 }
 
 .stats-icon {
@@ -353,7 +347,6 @@ button {
   align-items: center;
   justify-content: space-between;
   background: var(--app-card);
-  border: 1px solid var(--app-border);
   border-radius: 1rem;
   padding: 0.9rem 1rem;
 }
@@ -439,7 +432,6 @@ button {
   height: 4rem;
   border-radius: 999px;
   background: var(--app-card);
-  border: 1px solid var(--app-border);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -512,7 +504,6 @@ button {
   align-items: center;
   gap: 0.5rem;
   background: var(--app-card);
-  border: 1px solid var(--app-border);
   border-radius: 1rem;
   padding: 0.8rem 1rem;
 }
@@ -557,7 +548,6 @@ button {
   margin-top: 0.5rem;
   width: 100%;
   background: var(--app-card);
-  border: 1px solid var(--app-border);
   border-radius: 1rem;
   overflow: hidden;
   box-shadow: 0 16px 36px rgba(0, 0, 0, 0.3);
@@ -634,7 +624,6 @@ button {
 
 .skeleton-card {
   background: var(--app-card);
-  border: 1px solid var(--app-border);
   border-radius: 1.5rem;
 }
 
@@ -663,7 +652,6 @@ button {
   width: 76px;
   height: 7rem;
   background: var(--app-card);
-  border: 1px solid var(--app-border);
   border-radius: 1rem;
   flex-shrink: 0;
 }
@@ -677,7 +665,6 @@ button {
   gap: 0.75rem;
   border-radius: 1rem;
   padding: 1rem;
-  border: 1px solid var(--app-border);
   background: var(--app-card);
   cursor: pointer;
   transition: border-color 0.2s ease, background 0.2s ease;
@@ -777,7 +764,6 @@ button {
   gap: 0.6rem;
   padding: 0.8rem 0.9rem;
   border-radius: 1rem;
-  border: 1px solid var(--app-border);
   background: rgba(255, 255, 255, 0.04);
 }
 
@@ -835,7 +821,6 @@ button {
   gap: 0.75rem;
   margin-top: 1.25rem;
   padding-top: 1rem;
-  border-top: 1px solid var(--app-border);
 }
 
 .single-page-section-header {
@@ -855,7 +840,6 @@ button {
   font-size: 0.75rem;
   color: var(--app-muted);
   background: var(--app-card);
-  border: 1px solid var(--app-border);
   padding: 0.25rem 0.55rem;
   border-radius: 999px;
 }
@@ -892,7 +876,6 @@ button {
   border-radius: 1rem;
   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25);
   backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.16);
   animation: toast-in 0.25s ease-out;
 }
 
