@@ -1,7 +1,6 @@
-# Weatherly — React + TypeScript Weather App
+# Weather App
 
-A weather app built with React, TypeScript, and Vite, matching the attached
-Dribbble reference design. Live weather data comes from the
+A weather app built with React, TypeScript, and Vite. Live weather data comes from the
 [OpenWeatherMap](https://openweathermap.org/api) API.
 
 ## Getting started
