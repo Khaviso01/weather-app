@@ -9,7 +9,6 @@ Dribbble reference design. Live weather data comes from the
 1. **Get a free API key**
    - Sign up at [openweathermap.org/api](https://openweathermap.org/api)
    - Copy your key from the "API keys" tab of your account
-   - New keys can take a few minutes to activate
 
 2. **Configure the app**
 
@@ -31,12 +30,6 @@ Dribbble reference design. Live weather data comes from the
    npm install
    npm run dev
    ```
-
-   Open the printed local URL, then grant location permission (or search
-   for a city) to see live weather.
-
-   If the key is missing or invalid, the app shows an in-app setup guide
-   instead of crashing.
 
 Other scripts:
 
@@ -70,9 +63,6 @@ All are included in OpenWeatherMap's free tier (no paid subscription needed):
 - `GET /geo/1.0/reverse` — turns GPS coordinates into a place name for
   "current location"
 
-Note: OpenWeatherMap's free tier gives 3-hour forecast granularity rather
-than true hourly data — the "hourly" cards step in 3-hour increments.
-
 ## How it meets the brief
 
 **Real-time weather info**
@@ -99,17 +89,7 @@ than true hourly data — the "hourly" cards step in 3-hour increments.
   lets you switch the active one, and remove any (except "current location")
 
 **Customization**
-- Settings page toggles theme (dark/light) and units (°C/°F), both applied
-  instantly and persisted
-
-**Offline access**
-- Every fetched forecast is cached in `localStorage`; when offline, the app
-  shows the last cached data and surfaces a toast rather than failing
-- Reconnecting automatically triggers a background refresh
-
-**Performance**
-- Route-based pages are small and focused; data fetching is scoped to the
-  active location; skeleton loaders avoid layout jumps
+- Settings page toggles theme (dark/light)
 
 **Privacy**
 - No backend, no analytics, no third-party data collection — everything
@@ -145,13 +125,3 @@ and components share it via the `useApp()` hook rather than prop-drilling.
 The app renders as a centered "phone" card that scales fluidly from 320px
 up through desktop widths (tested at 320 / 480 / 768 / 1024 / 1200px), so
 the same layout works standalone on mobile or embedded in a wider viewport.
-
-## Notes
-
-- Push notifications require the user to opt in from Settings (browser
-  permission prompt) — this satisfies the "severe weather alerts" push
-  requirement using the standard Web Notifications API.
-- Geolocation and notifications both require a secure context (`https://`
-  or `localhost`) to work in most browsers.
-- Never commit your real `.env` file — only `.env.example` (with a
-  placeholder) is tracked.
