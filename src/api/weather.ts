@@ -5,8 +5,8 @@ const API_KEY = sanitizeApiKey(import.meta.env.VITE_OPENWEATHER_API_KEY);
 const GEO_BASE = "https://api.openweathermap.org/geo/1.0";
 const DATA_BASE = "https://api.openweathermap.org/data/2.5";
 
-function sanitizeApiKey(key: string) {
-  return key.trim().replace(/^"(.+)"$/, "$1");
+function sanitizeApiKey(key: string | undefined) {
+  return (key ?? "").trim().replace(/^"(.+)"$/, "$1");
 }
 
 export function hasApiKey(): boolean {
