@@ -21,7 +21,6 @@ export default function ForecastTabs({ active, onChange }: Props) {
           className={`forecast-tab ${active === t.key ? "active" : ""}`}
         >
           {t.label}
-          {active === t.key && <span className="forecast-tab-indicator" />}
         </button>
       ))}
     </div>

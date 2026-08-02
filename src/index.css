@@ -1,5 +1,5 @@
 :root {
-  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-family: "Geist", sans-serif;
   line-height: 1.5;
   font-weight: 400;
   color: var(--app-text);
@@ -85,13 +85,12 @@ button {
 .app-shell-card {
   position: relative;
   width: 100%;
-  max-width: 600px;
-  min-height: 720px;
+  max-width: 400px;
   max-height: 900px;
   height: 92dvh;
   background: var(--app-bg);
   border-radius: 2.25rem;
-  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.28);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.28);
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -306,17 +305,6 @@ button {
 
 .forecast-tab:hover {
   color: var(--app-text);
-}
-
-.forecast-tab-indicator {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  bottom: 0;
-  width: 0.35rem;
-  height: 0.35rem;
-  border-radius: 999px;
-  background: var(--app-accent);
 }
 
 .daily-forecast,
@@ -831,17 +819,9 @@ button {
 
 .single-page-section-title {
   font-size: 0.95rem;
-  font-weight: 600;
+  font-weight: 500;
   color: var(--app-text);
   margin: 0;
-}
-
-.single-page-section-count {
-  font-size: 0.75rem;
-  color: var(--app-muted);
-  background: var(--app-card);
-  padding: 0.25rem 0.55rem;
-  border-radius: 999px;
 }
 
 .locations-list {
@@ -870,6 +850,7 @@ button {
   max-width: 24rem;
   width: 100%;
   text-align: center;
+  color: #090909;
   font-size: 0.95rem;
   font-weight: 500;
   padding: 0.75rem 1rem;
@@ -880,20 +861,20 @@ button {
 }
 
 .toast.success {
-  background: rgba(16, 185, 129, 0.18);
+  background: #fff;
   border-color: rgba(74, 222, 128, 0.3);
-  color: #bbf7d0;
+  color: #090909;
 }
 
 .toast.error {
-  background: rgba(244, 63, 94, 0.16);
-  border-color: rgba(251, 113, 133, 0.3);
-  color: #fecdd3;
+  background: #fff;
+  border-color: #fd021f;
+  color: #fd021f;
 }
 
 .toast.info {
   background: rgba(255, 255, 255, 0.1);
-  color: #fff;
+  color: #090909;
 }
 
 @keyframes toast-in {

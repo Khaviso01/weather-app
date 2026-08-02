@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from "react";
-import { LocateFixed } from "lucide-react";
 import { useApp } from "../context/AppContext";
 import { CURRENT_ID } from "../constants";
 import TopBar from "../components/TopBar";
@@ -129,12 +128,10 @@ export default function Home() {
 
       <div className="single-page-section">
         <div className="single-page-section-header">
-          <h3 className="single-page-section-title">Saved places</h3>
-          <span className="single-page-section-count">{locations.length}</span>
+          <h3 className="single-page-section-title">Saved Locations</h3>
         </div>
 
         <button onClick={requestGeolocation} disabled={geoStatus === "requesting"} className="locations-add-button">
-          <LocateFixed size={16} className="text-app-accent" />
           {geoStatus === "requesting" ? "Locating…" : "Use current location"}
         </button>
 
