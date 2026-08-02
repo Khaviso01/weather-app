@@ -575,6 +575,113 @@ button {
   color: var(--app-muted);
 }
 
+.settings-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.settings-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.settings-section-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--app-text);
+}
+
+.settings-section-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  background: var(--app-card);
+  border-radius: 1.5rem;
+  padding: 1rem;
+  border: 1px solid var(--app-border);
+}
+
+.settings-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.settings-row-main {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.settings-row-icon {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 0.75rem;
+  display: grid;
+  place-items: center;
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--app-accent);
+  flex-shrink: 0;
+}
+
+.settings-row-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.settings-row-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--app-text);
+}
+
+.settings-row-description {
+  font-size: 0.8rem;
+  color: var(--app-muted);
+}
+
+.settings-row-control {
+  min-width: 0;
+  display: flex;
+  justify-content: flex-end;
+  flex: 1;
+}
+
+.settings-api-input {
+  width: 100%;
+  min-width: 0;
+  padding: 0.75rem 0.9rem;
+  border-radius: 1rem;
+  border: 1px solid var(--app-border);
+  background: var(--app-bg);
+  color: var(--app-text);
+  outline: none;
+}
+
+.settings-api-input::placeholder {
+  color: var(--app-muted);
+}
+
+.settings-clear-button {
+  background: var(--app-accent);
+  color: #000;
+  font-weight: 600;
+  font-size: 0.9rem;
+  padding: 0.75rem 1rem;
+  border-radius: 1rem;
+  cursor: pointer;
+}
+
+.settings-clear-button:hover {
+  opacity: 0.95;
+}
+
 .segmented-control {
   display: inline-flex;
   align-items: center;

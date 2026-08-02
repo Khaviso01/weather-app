@@ -40,7 +40,7 @@ function SettingsRow({
 }
 
 export default function Settings() {
-  const { theme, setTheme, unit, setUnit, locations } = useApp();
+  const { theme, setTheme, unit, setUnit, locations, apiKey, setApiKey } = useApp();
   const { showToast } = useToast();
   const [notifPermission, setNotifPermission] = useState<NotificationPermission>(
     typeof Notification !== "undefined" ? Notification.permission : "denied"
@@ -137,6 +137,20 @@ export default function Settings() {
       </SettingsSection>
 
       <SettingsSection title="Data">
+        <SettingsRow
+          icon={<Bell size={16} />}
+          label="OpenWeather API Key"
+          description="Enter a valid OpenWeatherMap key so live search and weather data work in this browser."
+          control={
+            <input
+              type="text"
+              value={apiKey}
+              onChange={(e) => setApiKey(e.target.value)}
+              placeholder="Paste your OpenWeather API key"
+              className="settings-api-input"
+            />
+          }
+        />
         <SettingsRow
           icon={<Trash2 size={16} />}
           label="Clear cached forecasts"

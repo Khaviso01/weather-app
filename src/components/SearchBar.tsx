@@ -33,7 +33,7 @@ export default function SearchBar({ onSelect, placeholder = "Search for a city" 
 
     if (apiKeyMissing) {
       setResults([]);
-      setError("API key is missing. Add VITE_OPENWEATHER_API_KEY to your .env file.");
+      setError("API key is missing. Enter it in Settings to enable search.");
       setLoading(false);
       return;
     }

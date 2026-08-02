@@ -1,7 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useRef, useState, type ReactNode } from "react";
 import type { SavedLocation, WeatherBundle, Theme, TempUnit } from "../types/weather";
 import { useLocalStorage } from "../hooks/useLocalStorage";
-import { fetchWeather, reverseGeocode, hasApiKey } from "../api/weather";
+import { fetchWeather, reverseGeocode, hasApiKey, setApiKey } from "../api/weather";
 import { useToast } from "./ToastContext";
 import { CURRENT_ID } from "../constants";
 
@@ -27,6 +27,8 @@ interface AppContextValue {
   isRefreshing: boolean;
   geoStatus: "idle" | "requesting" | "granted" | "denied";
   requestGeolocation: () => void;
+  apiKey: string;
+  setApiKey: (key: string) => void;
   apiKeyMissing: boolean;
 }
 
@@ -49,6 +51,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     null
   );
   const [cache, setCache] = useLocalStorage<Record<string, CacheEntry>>("weather:cache", {});
+  const [apiKey, setApiKeyState] = useLocalStorage<string>("weather:apiKey", import.meta.env.VITE_OPENWEATHER_API_KEY ?? "");
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [geoStatus, setGeoStatus] = useState<"idle" | "requesting" | "granted" | "denied">("idle");
@@ -188,6 +191,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeLocationId, locations.length]);
 
+  useEffect(() => {
+    setApiKey(apiKey);
+  }, [apiKey]);
+
   const value: AppContextValue = {
     theme,
     setTheme,
@@ -205,6 +212,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
     isRefreshing,
     geoStatus,
     requestGeolocation,
+    apiKey,
+    setApiKey: setApiKeyState,
     apiKeyMissing: !hasApiKey(),
   };
 
