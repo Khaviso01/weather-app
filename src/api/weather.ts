@@ -1,9 +1,13 @@
 import type { WeatherBundle, SavedLocation } from "../types/weather";
 
-const API_KEY = import.meta.env.VITE_OPENWEATHER_API_KEY;
+const API_KEY = sanitizeApiKey(import.meta.env.VITE_OPENWEATHER_API_KEY);
 
 const GEO_BASE = "https://api.openweathermap.org/geo/1.0";
 const DATA_BASE = "https://api.openweathermap.org/data/2.5";
+
+function sanitizeApiKey(key: string) {
+  return key.trim().replace(/^"(.+)"$/, "$1");
+}
 
 export function hasApiKey(): boolean {
   return Boolean(API_KEY && API_KEY.trim().length > 0);

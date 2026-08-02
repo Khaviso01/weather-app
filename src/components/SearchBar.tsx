@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { Search, X, Loader2 } from "lucide-react";
 import { searchLocations } from "../api/weather";
+import { useToast } from "../context/ToastContext";
+import { useApp } from "../context/AppContext";
 import type { SavedLocation } from "../types/weather";
 
 interface Props {
@@ -13,24 +15,43 @@ export default function SearchBar({ onSelect, placeholder = "Search for a city" 
   const [results, setResults] = useState<SavedLocation[]>([]);
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const { showToast } = useToast();
+  const { apiKeyMissing } = useApp();
 
   useEffect(() => {
     if (debounceRef.current) clearTimeout(debounceRef.current);
     if (!query.trim()) {
       // eslint-disable-next-line react-hooks/set-state-in-effect -- clearing stale results when the query is emptied is intentional
       setResults([]);
+      setError(null);
       setLoading(false);
       return;
     }
+
+    if (apiKeyMissing) {
+      setResults([]);
+      setError("API key is missing. Add VITE_OPENWEATHER_API_KEY to your .env file.");
+      setLoading(false);
+      return;
+    }
+
+    setError(null);
     setLoading(true);
     debounceRef.current = setTimeout(async () => {
       try {
         const r = await searchLocations(query);
         setResults(r);
+        if (r.length === 0) {
+          setError("No matching locations were found. Try a different query.");
+        }
       } catch {
+        const message = "Unable to fetch location results. Check your API key and network.";
         setResults([]);
+        setError(message);
+        showToast(message, "error");
       } finally {
         setLoading(false);
       }
@@ -38,7 +59,7 @@ export default function SearchBar({ onSelect, placeholder = "Search for a city" 
     return () => {
       if (debounceRef.current) clearTimeout(debounceRef.current);
     };
-  }, [query]);
+  }, [query, apiKeyMissing, showToast]);
 
   useEffect(() => {
     function handleClick(e: MouseEvent) {
@@ -83,7 +104,8 @@ export default function SearchBar({ onSelect, placeholder = "Search for a city" 
       {open && query && (
         <div className="search-results">
           {loading && <div className="search-empty">Searching…</div>}
-          {!loading && results.length === 0 && <div className="search-empty">No matching locations</div>}
+          {!loading && error && <div className="search-empty">{error}</div>}
+          {!loading && !error && results.length === 0 && <div className="search-empty">No matching locations</div>}
           {results.map((r) => (
             <button
               key={r.id}
@@ -91,6 +113,7 @@ export default function SearchBar({ onSelect, placeholder = "Search for a city" 
                 onSelect(r);
                 setQuery("");
                 setResults([]);
+                setError(null);
                 setOpen(false);
               }}
               className="search-result"
