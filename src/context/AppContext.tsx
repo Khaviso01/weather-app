@@ -32,9 +32,16 @@ interface AppContextValue {
 
 const AppContext = createContext<AppContextValue | null>(null);
 
+function getDefaultTheme(): Theme {
+  if (typeof window !== "undefined" && window.matchMedia?.("(prefers-color-scheme: dark)").matches) {
+    return "dark";
+  }
+  return "light";
+}
+
 export function AppProvider({ children }: { children: ReactNode }) {
   const { showToast } = useToast();
-  const [theme, setTheme] = useLocalStorage<Theme>("weather:theme", "dark");
+  const [theme, setTheme] = useLocalStorage<Theme>("weather:theme", getDefaultTheme);
   const [unit, setUnit] = useLocalStorage<TempUnit>("weather:unit", "C");
   const [locations, setLocations] = useLocalStorage<SavedLocation[]>("weather:locations", []);
   const [activeLocationId, setActiveLocationId] = useLocalStorage<string | null>(
