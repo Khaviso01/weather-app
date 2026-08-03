@@ -12,13 +12,14 @@ interface Props {
   dateLabel: string;
 }
 
+
+
 export default function WeatherHero({
   temperature,
   weatherCode,
   description,
   isDay,
   unit,
-  dateLabel,
 }: Props) {
   const condition = codeToCondition(weatherCode);
   const displayTemp = unit === "C" ? temperature : celsiusToFahrenheit(temperature);
@@ -27,7 +28,6 @@ export default function WeatherHero({
     <div className="weather-hero">
       <div className="weather-hero-content">
         <div className="weather-hero-text">
-          <span className="weather-hero-date">{dateLabel}</span>
           <span className="weather-hero-description">{titleCase(description)}</span>
           <span className="weather-hero-temp">
             {displayTemp}°{unit}
@@ -35,6 +35,7 @@ export default function WeatherHero({
         </div>
         <WeatherIcon condition={condition} isDay={isDay} size={84} className="weather-hero-icon" />
       </div>
+      
     </div>
   );
 }

@@ -1,9 +1,8 @@
 import type { WeatherBundle, SavedLocation } from "../types/weather";
 
-let API_KEY = sanitizeApiKey(import.meta.env.VITE_OPENWEATHER_API_KEY);
+let API_KEY = sanitizeApiKey(import.meta.env.VITE_WEATHERAPI_KEY);
 
-const GEO_BASE = "https://api.openweathermap.org/geo/1.0";
-const DATA_BASE = "https://api.openweathermap.org/data/2.5";
+const API_BASE = "https://api.weatherapi.com/v1";
 
 function sanitizeApiKey(key: string | undefined) {
   return (key ?? "").trim().replace(/^"(.+)"$/, "$1");
@@ -19,7 +18,7 @@ export function hasApiKey(): boolean {
 
 class MissingApiKeyError extends Error {
   constructor() {
-    super("OpenWeatherMap API key is missing. Add VITE_OPENWEATHER_API_KEY to your .env file.");
+    super("WeatherAPI key is missing. Add VITE_WEATHERAPI_KEY to your .env file.");
     this.name = "MissingApiKeyError";
   }
 }
@@ -29,25 +28,30 @@ function requireKey() {
   return API_KEY as string;
 }
 
-interface RawGeocodeResult {
+interface RawSearchResult {
   name: string;
+  region?: string;
+  country: string;
   lat: number;
   lon: number;
-  country: string;
-  state?: string;
 }
 
 export async function searchLocations(query: string): Promise<SavedLocation[]> {
   if (!query.trim()) return [];
   const key = requireKey();
-  const url = `${GEO_BASE}/direct?q=${encodeURIComponent(query)}&limit=6&appid=${key}`;
+  const url = `${API_BASE}/search.json?key=${key}&q=${encodeURIComponent(query)}`;
   const res = await fetch(url);
-  if (!res.ok) throw new Error("Failed to search locations");
-  const data = (await res.json()) as RawGeocodeResult[];
+
+  if (!res.ok) {
+    const error = await res.text();
+    console.error("WeatherAPI Error:", error);
+    throw new Error("Failed to search locations");
+  }
+  const data = (await res.json()) as RawSearchResult[];
   return data.map((r) => ({
     id: `${r.lat.toFixed(3)},${r.lon.toFixed(3)}`,
     name: r.name,
-    country: r.state ? `${r.state}, ${r.country}` : r.country,
+    country: r.region ? `${r.region}, ${r.country}` : r.country,
     latitude: r.lat,
     longitude: r.lon,
   }));
@@ -56,103 +60,103 @@ export async function searchLocations(query: string): Promise<SavedLocation[]> {
 export async function reverseGeocode(lat: number, lon: number): Promise<{ name: string; country: string }> {
   try {
     const key = requireKey();
-    const url = `${GEO_BASE}/reverse?lat=${lat}&lon=${lon}&limit=1&appid=${key}`;
+    const url = `${API_BASE}/search.json?key=${key}&q=${lat},${lon}`;
     const res = await fetch(url);
     if (!res.ok) throw new Error("reverse failed");
-    const data = (await res.json()) as RawGeocodeResult[];
+    const data = (await res.json()) as RawSearchResult[];
     const r = data[0];
     if (!r) return { name: "My Location", country: "" };
-    return { name: r.name, country: r.state ? `${r.state}, ${r.country}` : r.country };
+    return { name: r.name, country: r.region ? `${r.region}, ${r.country}` : r.country };
   } catch {
     return { name: "My Location", country: "" };
   }
 }
 
-interface OwmWeatherEntry {
-  dt: number;
-  main: { temp: number; temp_max: number; temp_min: number; humidity: number };
-  weather: { id: number; description: string; icon: string }[];
-  wind: { speed: number };
-  pop?: number;
-  dt_txt?: string;
+interface RawCondition {
+  text: string;
+  icon: string;
+  code: number;
 }
 
-interface OwmCurrentResponse extends OwmWeatherEntry {
-  sys: { sunrise: number; sunset: number };
+interface RawCurrentResponse {
+  last_updated_epoch: number;
+  temp_c: number;
+  is_day: 0 | 1;
+  condition: RawCondition;
+  wind_kph: number;
+  humidity: number;
 }
 
-interface OwmForecastResponse {
-  list: OwmWeatherEntry[];
-  city: { timezone: number; name: string };
+interface RawForecastHour {
+  time_epoch: number;
+  temp_c: number;
+  condition: RawCondition;
+  chance_of_rain?: number;
+  chance_of_snow?: number;
+  precip_mm: number;
+  is_day: 0 | 1;
 }
 
-function isDayFromIcon(icon: string): boolean {
-  return icon.endsWith("d");
+interface RawForecastDay {
+  date: string;
+  day: {
+    maxtemp_c: number;
+    mintemp_c: number;
+    condition: RawCondition;
+    daily_chance_of_rain?: number;
+    daily_chance_of_snow?: number;
+  };
+  hour: RawForecastHour[];
+}
+
+interface RawWeatherResponse {
+  location: { tz_id: string };
+  current: RawCurrentResponse;
+  forecast: { forecastday: RawForecastDay[] };
 }
 
 export async function fetchWeather(lat: number, lon: number): Promise<WeatherBundle> {
   const key = requireKey();
-  const params = `lat=${lat}&lon=${lon}&units=metric&appid=${key}`;
-
-  const [currentRes, forecastRes] = await Promise.all([
-    fetch(`${DATA_BASE}/weather?${params}`),
-    fetch(`${DATA_BASE}/forecast?${params}`),
-  ]);
-
-  if (!currentRes.ok || !forecastRes.ok) {
-    if (currentRes.status === 401 || forecastRes.status === 401) {
-      throw new Error("Invalid OpenWeatherMap API key.");
-    }
-    throw new Error("Failed to fetch weather");
+  const url = `${API_BASE}/forecast.json?key=${key}&q=${lat},${lon}&days=6&aqi=no&alerts=no`;
+  const res = await fetch(url);
+  if (!res.ok) {
+    const errorResponse = await res.text();
+    throw new Error(`Failed to fetch weather: ${errorResponse}`);
   }
+  const data = (await res.json()) as RawWeatherResponse;
 
-  const currentData = (await currentRes.json()) as OwmCurrentResponse;
-  const forecastData = (await forecastRes.json()) as OwmForecastResponse;
-
-  const nowSeconds = currentData.dt;
-  const isDayNow = nowSeconds >= currentData.sys.sunrise && nowSeconds < currentData.sys.sunset;
-
-  // The current-weather endpoint doesn't include precipitation probability;
-  // approximate it using the nearest 3-hour forecast slot.
-  const nearestForecast = forecastData.list.reduce((closest, entry) =>
-    Math.abs(entry.dt - nowSeconds) < Math.abs(closest.dt - nowSeconds) ? entry : closest
+  const currentData = data.current;
+  const forecastDays = data.forecast.forecastday;
+  const allHours = forecastDays.flatMap((day) => day.hour);
+  const nowSeconds = currentData.last_updated_epoch;
+  const nearestForecast = allHours.reduce((closest, entry) =>
+    Math.abs(entry.time_epoch - nowSeconds) < Math.abs(closest.time_epoch - nowSeconds) ? entry : closest
   );
 
   const current = {
-    temperature: Math.round(currentData.main.temp),
-    weatherCode: currentData.weather[0].id,
-    description: currentData.weather[0].description,
-    windSpeed: Math.round(currentData.wind.speed),
-    humidity: Math.round(currentData.main.humidity),
-    precipitationProbability: Math.round((nearestForecast.pop ?? 0) * 100),
-    isDay: isDayNow,
+    temperature: Math.round(currentData.temp_c),
+    weatherCode: currentData.condition.code,
+    description: currentData.condition.text,
+    windSpeed: Math.round(currentData.wind_kph / 3.6),
+    humidity: Math.round(currentData.humidity),
+    precipitationProbability: Math.round(nearestForecast.chance_of_rain ?? nearestForecast.chance_of_snow ?? 0),
+    isDay: currentData.is_day === 1,
     time: new Date(nowSeconds * 1000).toISOString(),
   };
 
-  const hourly = forecastData.list.slice(0, 16).map((entry) => ({
-    time: new Date(entry.dt * 1000).toISOString(),
-    temperature: Math.round(entry.main.temp),
-    weatherCode: entry.weather[0].id,
-    precipitationProbability: Math.round((entry.pop ?? 0) * 100),
+  const nextHoursStart = allHours.findIndex((entry) => entry.time_epoch >= nowSeconds);
+  const hourlyStart = nextHoursStart !== -1 ? nextHoursStart : 0;
+  const hourly = allHours.slice(hourlyStart, hourlyStart + 16).map((entry) => ({
+    time: new Date(entry.time_epoch * 1000).toISOString(),
+    temperature: Math.round(entry.temp_c),
+    weatherCode: entry.condition.code,
+    precipitationProbability: Math.round(entry.chance_of_rain ?? entry.chance_of_snow ?? 0),
   }));
 
-  // Group the 3-hour forecast entries by calendar date to build a daily summary.
-  const byDate = new Map<string, OwmWeatherEntry[]>();
-  for (const entry of forecastData.list) {
-    const dateKey = (entry.dt_txt ?? new Date(entry.dt * 1000).toISOString()).slice(0, 10);
-    const bucket = byDate.get(dateKey) ?? [];
-    bucket.push(entry);
-    byDate.set(dateKey, bucket);
-  }
-
-  const todayKey = new Date(nowSeconds * 1000).toISOString().slice(0, 10);
-  const dateKeys = Array.from(byDate.keys());
-  if (!dateKeys.includes(todayKey)) dateKeys.unshift(todayKey);
-
-  const daily = dateKeys.slice(0, 6).map((dateKey) => {
-    if (dateKey === todayKey) {
+  const daily = forecastDays.slice(0, 6).map((day, index) => {
+    if (index === 0) {
       return {
-        date: dateKey,
+        date: day.date,
         weatherCode: current.weatherCode,
         description: current.description,
         tempMax: current.temperature,
@@ -160,21 +164,13 @@ export async function fetchWeather(lat: number, lon: number): Promise<WeatherBun
         precipitationProbability: current.precipitationProbability,
       };
     }
-    const entries = byDate.get(dateKey) ?? [];
-    const temps = entries.map((e) => e.main.temp);
-    // Use the entry closest to midday as the representative condition for the day.
-    const midday = entries.reduce((closest, e) => {
-      const closestHour = new Date(closest.dt * 1000).getUTCHours();
-      const entryHour = new Date(e.dt * 1000).getUTCHours();
-      return Math.abs(entryHour - 12) < Math.abs(closestHour - 12) ? e : closest;
-    }, entries[0]);
     return {
-      date: dateKey,
-      weatherCode: midday.weather[0].id,
-      description: midday.weather[0].description,
-      tempMax: Math.round(Math.max(...temps)),
-      tempMin: Math.round(Math.min(...temps)),
-      precipitationProbability: Math.round(Math.max(...entries.map((e) => e.pop ?? 0)) * 100),
+      date: day.date,
+      weatherCode: day.day.condition.code,
+      description: day.day.condition.text,
+      tempMax: Math.round(day.day.maxtemp_c),
+      tempMin: Math.round(day.day.mintemp_c),
+      precipitationProbability: Math.round(day.day.daily_chance_of_rain ?? day.day.daily_chance_of_snow ?? 0),
     };
   });
 
@@ -182,7 +178,7 @@ export async function fetchWeather(lat: number, lon: number): Promise<WeatherBun
     current,
     hourly,
     daily,
-    timezone: forecastData.city.timezone.toString(),
+    timezone: data.location.tz_id,
   };
 }
 
@@ -190,4 +186,4 @@ export function celsiusToFahrenheit(c: number): number {
   return Math.round((c * 9) / 5 + 32);
 }
 
-export { isDayFromIcon, MissingApiKeyError };
+export { MissingApiKeyError };

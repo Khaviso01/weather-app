@@ -139,14 +139,14 @@ export default function Settings() {
       <SettingsSection title="Data">
         <SettingsRow
           icon={<Bell size={16} />}
-          label="OpenWeather API Key"
-          description="Enter a valid OpenWeatherMap key so live search and weather data work in this browser."
+          label="WeatherAPI Key"
+          description="Enter a valid WeatherAPI key so live search and weather data work in this browser."
           control={
             <input
               type="text"
               value={apiKey}
               onChange={(e) => setApiKey(e.target.value)}
-              placeholder="Paste your OpenWeather API key"
+              placeholder="Paste your WeatherAPI key"
               className="settings-api-input"
             />
           }

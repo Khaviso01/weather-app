@@ -1,5 +1,5 @@
-// Maps OpenWeatherMap condition codes to the app's internal Condition type.
-// Reference: https://openweathermap.org/weather-conditions
+// Maps WeatherAPI condition codes to the app's internal Condition type.
+// Reference: https://www.weatherapi.com/docs/weather_conditions.json
 
 export type Condition =
   | "clear"
@@ -11,19 +11,30 @@ export type Condition =
   | "snow"
   | "thunder";
 
+const thunderCodes = new Set([1087, 1273, 1276, 1279, 1282]);
+const drizzleCodes = new Set([1072, 1150, 1153, 1168, 1171]);
+const rainCodes = new Set([
+  1063, 1069, 1180, 1183, 1186, 1189, 1192, 1195, 1198, 1201,
+  1240, 1243, 1246, 1249, 1252,
+]);
+const snowCodes = new Set([
+  1066, 1204, 1207, 1210, 1213, 1216, 1219, 1222, 1225,
+  1237, 1255, 1258, 1261, 1264,
+]);
+
 export function codeToCondition(code: number): Condition {
-  if (code >= 200 && code < 300) return "thunder";
-  if (code >= 300 && code < 400) return "drizzle";
-  if (code >= 500 && code < 600) return "rain";
-  if (code >= 600 && code < 700) return "snow";
-  if (code >= 700 && code < 800) return "fog";
-  if (code === 800) return "clear";
-  if (code === 801 || code === 802) return "partly-cloudy";
-  if (code === 803 || code === 804) return "cloudy";
+  if (code === 1000) return "clear";
+  if (code === 1003) return "partly-cloudy";
+  if (code === 1006 || code === 1009) return "cloudy";
+  if (thunderCodes.has(code)) return "thunder";
+  if (drizzleCodes.has(code)) return "drizzle";
+  if (rainCodes.has(code)) return "rain";
+  if (snowCodes.has(code)) return "snow";
+  if (code >= 1012 && code <= 1048) return "fog";
   return "cloudy";
 }
 
-// Fallback label, used only if OpenWeatherMap's own description text is unavailable.
+// Fallback label, used only if WeatherAPI's own description text is unavailable.
 export function codeToLabel(code: number): string {
   const map: Record<Condition, string> = {
     clear: "Clear Sky",

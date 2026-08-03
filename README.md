@@ -1,13 +1,13 @@
 # Weather App
 
 A weather app built with React, TypeScript, and Vite. Live weather data comes from the
-[OpenWeatherMap](https://openweathermap.org/api) API.
+[WeatherAPI](https://www.weatherapi.com/) API.
 
 ## Getting started
 
 1. **Get a free API key**
-   - Sign up at [openweathermap.org/api](https://openweathermap.org/api)
-   - Copy your key from the "API keys" tab of your account
+   - Sign up at [weatherapi.com](https://www.weatherapi.com/)
+   - Copy your key from the account dashboard
 
 2. **Configure the app**
 
@@ -20,7 +20,7 @@ A weather app built with React, TypeScript, and Vite. Live weather data comes fr
    Then edit `.env`:
 
    ```
-   VITE_OPENWEATHER_API_KEY=your_key_here
+   VITE_WEATHERAPI_KEY=your_key_here
    ```
 
 3. **Install and run**
@@ -45,35 +45,29 @@ npm run lint       # run ESLint
 - **react-router-dom v6** — routing between Weather / Locations / Settings
 - **Tailwind CSS v4** — utility-first styling, theme-driven via CSS variables
 - **lucide-react** — icon set for UI chrome (nav, stats, alerts)
-- **OpenWeatherMap API** — current conditions, 5-day/3-hour forecast, and
-  geocoding/reverse-geocoding for search and current-location lookup
+- **WeatherAPI** — current conditions, multi-day forecast, and
+  search/reverse lookup for saved locations and current geolocation
 - **localStorage** — the sole data store (no backend), used for saved
   locations, active location, theme, units, and cached forecasts
 
-## Which OpenWeatherMap endpoints are used
+## Which WeatherAPI endpoints are used
 
-All are included in OpenWeatherMap's free tier (no paid subscription needed):
+The app uses WeatherAPI's forecast and search endpoints:
 
-- `GET /data/2.5/weather` — current conditions for a lat/lon
-- `GET /data/2.5/forecast` — 5-day forecast in 3-hour steps; the app uses
-  this for both the hourly cards (today/tomorrow) and, by grouping entries
-  per calendar day, the daily summaries shown in "Next 3 Days"
-- `GET /geo/1.0/direct` — turns a searched city name into coordinates
-- `GET /geo/1.0/reverse` — turns GPS coordinates into a place name for
-  "current location"
+- `GET /forecast.json` — current conditions plus multi-day forecast data
+- `GET /search.json` — location search and reverse lookup by lat/lon
 
 ## How it meets the brief
 
 **Real-time weather info**
 - Current temperature, condition, wind speed, humidity, and rain chance
-- Hourly (3-hour step) and 3-day forecasts
+- Hourly and multi-day forecasts
 - Today / Tomorrow / Next 3 Days toggle to switch views
 
 **Location-based forecasting**
 - "Use current location" requests browser geolocation, reverse-geocodes it
   to a place name, and fetches its forecast
-- Search-as-you-type city lookup (debounced, via OpenWeatherMap's geocoding
-  API)
+- Search-as-you-type city lookup (debounced, via WeatherAPI's search API)
 - Every location (current or searched) is saved and revisitable from the
   Locations page
 
@@ -100,7 +94,7 @@ All are included in OpenWeatherMap's free tier (no paid subscription needed):
 
 ```
 src/
-  api/            OpenWeatherMap fetch + geocoding helpers
+  api/            WeatherAPI fetch + lookup helpers
   components/      Reusable UI: WeatherIcon, WeatherHero, StatsRow,
                     ForecastTabs, HourlyForecast, DailyForecast,
                     SearchBar, LocationCard, TopBar, AlertBanner,

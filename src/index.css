@@ -101,7 +101,7 @@ button {
   flex: 1;
   overflow-y: auto;
   overscroll-behavior: contain;
-  padding: 1.5rem 1rem 6rem;
+  padding: 1.5rem 1rem;
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
@@ -494,10 +494,6 @@ button {
   background: var(--app-card);
   border-radius: 1rem;
   padding: 0.8rem 1rem;
-}
-
-.search-box:focus-within {
-  border-color: color-mix(in srgb, var(--app-accent) 60%, var(--app-border));
 }
 
 .search-icon,
@@ -1003,11 +999,6 @@ button {
   50% {
     opacity: 0.5;
   }
-}
-
-:focus-visible {
-  outline: 2px solid var(--app-accent);
-  outline-offset: 2px;
 }
 
 @media (prefers-reduced-motion: reduce) {

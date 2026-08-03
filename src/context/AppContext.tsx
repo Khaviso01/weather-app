@@ -51,7 +51,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
     null
   );
   const [cache, setCache] = useLocalStorage<Record<string, CacheEntry>>("weather:cache", {});
-  const [apiKey, setApiKeyState] = useLocalStorage<string>("weather:apiKey", import.meta.env.VITE_OPENWEATHER_API_KEY ?? "");
+  const [apiKey, setApiKeyState] = useLocalStorage<string>("weather:apiKey", import.meta.env.VITE_WEATHERAPI_KEY ?? "");
+  const hasApiKeyState = apiKey.trim().length > 0;
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [geoStatus, setGeoStatus] = useState<"idle" | "requesting" | "granted" | "denied">("idle");
@@ -214,7 +215,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     requestGeolocation,
     apiKey,
     setApiKey: setApiKeyState,
-    apiKeyMissing: !hasApiKey(),
+    apiKeyMissing: !hasApiKeyState,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

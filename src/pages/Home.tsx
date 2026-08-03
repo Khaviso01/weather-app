@@ -97,7 +97,7 @@ export default function Home() {
       <TopBar
         locationName={
           activeLocation?.isCurrent || activeId === CURRENT_ID
-            ? `${activeLocation?.name} (You)`
+            ? `${activeLocation?.name}`
             : activeLocation?.name ?? "Weather"
         }
         isOnline={isOnline}

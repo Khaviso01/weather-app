@@ -12,7 +12,17 @@ export function deriveAlerts(current: CurrentWeather, locationName: string): Wea
     });
   }
 
-  if ([200, 201, 202, 210, 211, 212, 221, 230, 231, 232].includes(current.weatherCode)) {
+  const thunderCodes = [1087, 1273, 1276, 1279, 1282];
+  const rainCodes = new Set([
+    1063, 1069, 1180, 1183, 1186, 1189, 1192, 1195, 1198, 1201,
+    1240, 1243, 1246, 1249, 1252, 1273, 1276,
+  ]);
+  const snowCodes = new Set([
+    1066, 1204, 1207, 1210, 1213, 1216, 1219, 1222, 1225,
+    1237, 1255, 1258, 1261, 1264, 1279, 1282,
+  ]);
+
+  if (thunderCodes.includes(current.weatherCode)) {
     alerts.push({
       id: "thunder",
       title: "Thunderstorm Alert",
@@ -21,7 +31,7 @@ export function deriveAlerts(current: CurrentWeather, locationName: string): Wea
     });
   }
 
-  if (current.precipitationProbability >= 80 && current.weatherCode >= 500 && current.weatherCode < 532) {
+  if (current.precipitationProbability >= 80 && rainCodes.has(current.weatherCode)) {
     alerts.push({
       id: "rain",
       title: "Heavy Rain Alert",
@@ -30,7 +40,7 @@ export function deriveAlerts(current: CurrentWeather, locationName: string): Wea
     });
   }
 
-  if (current.weatherCode >= 600 && current.weatherCode < 700 && current.temperature <= 0) {
+  if (current.temperature <= 0 && snowCodes.has(current.weatherCode)) {
     alerts.push({
       id: "snow",
       title: "Snow Advisory",

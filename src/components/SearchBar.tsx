@@ -47,8 +47,11 @@ export default function SearchBar({ onSelect, placeholder = "Search for a city" 
         if (r.length === 0) {
           setError("No matching locations were found. Try a different query.");
         }
-      } catch {
+      } catch (err) {
+        console.error("Search failed:", err);
+
         const message = "Unable to fetch location results. Check your API key and network.";
+
         setResults([]);
         setError(message);
         showToast(message, "error");
