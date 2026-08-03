@@ -42,8 +42,6 @@ npm run lint       # run ESLint
 
 - **React 19 + TypeScript** — component-based UI with full type safety
 - **Vite** — dev server and build tooling
-- **react-router-dom v6** — routing between Weather / Locations / Settings
-- **Tailwind CSS v4** — utility-first styling, theme-driven via CSS variables
 - **lucide-react** — icon set for UI chrome (nav, stats, alerts)
 - **WeatherAPI** — current conditions, multi-day forecast, and
   search/reverse lookup for saved locations and current geolocation
@@ -67,7 +65,7 @@ The app uses WeatherAPI's forecast and search endpoints:
 **Location-based forecasting**
 - "Use current location" requests browser geolocation, reverse-geocodes it
   to a place name, and fetches its forecast
-- Search-as-you-type city lookup (debounced, via WeatherAPI's search API)
+- Search-as-you-type city lookup (debounces, via WeatherAPI's search API)
 - Every location (current or searched) is saved and revisitable from the
   Locations page
 
