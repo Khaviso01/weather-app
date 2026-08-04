@@ -20,6 +20,7 @@ export default function WeatherHero({
   description,
   isDay,
   unit,
+  
 }: Props) {
   const condition = codeToCondition(weatherCode);
   const displayTemp = unit === "C" ? temperature : celsiusToFahrenheit(temperature);

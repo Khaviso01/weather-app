@@ -100,10 +100,7 @@ button {
 .app-shell-main {
   flex: 1;
   overflow-y: auto;
-  overscroll-behavior: contain;
-  padding: 1.5rem 1rem;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
+  padding: 0 1rem;
 }
 
 .app-shell-main::-webkit-scrollbar {
@@ -518,8 +515,11 @@ button {
 }
 
 .search-shell {
-  position: relative;
-  width: 100%;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--app-bg);
+  padding: 1rem 0;
 }
 
 .search-box {
