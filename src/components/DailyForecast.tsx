@@ -10,7 +10,6 @@ interface Props {
 
 function formatDay(iso: string, index: number) {
   if (index === 0) return "Today";
-  if (index === 1) return "Tomorrow";
   const d = new Date(iso);
   return d.toLocaleDateString("en-US", { weekday: "long" });
 }

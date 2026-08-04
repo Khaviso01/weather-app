@@ -1,10 +1,9 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
 import { useApp } from "../context/AppContext";
 import { CURRENT_ID } from "../constants";
 import TopBar from "../components/TopBar";
 import WeatherHero from "../components/WeatherHero";
 import StatsRow from "../components/StatsRow";
-import ForecastTabs, { type ForecastTab } from "../components/ForecastTabs";
 import HourlyForecast from "../components/HourlyForecast";
 import DailyForecast from "../components/DailyForecast";
 import AlertBanner from "../components/AlertBanner";
@@ -30,7 +29,6 @@ export default function Home() {
     unit,
   } = useApp();
   const { showToast } = useToast();
-  const [tab, setTab] = useState<ForecastTab>("today");
 
   const activeId = activeLocationId ?? locations[0]?.id ?? null;
   const activeLocation = locations.find((l) => l.id === activeId);
@@ -83,12 +81,6 @@ export default function Home() {
   const { bundle } = entry;
   const alerts = deriveAlerts(bundle.current, activeLocation?.name ?? "your area");
 
-  const hoursForTab = () => {
-    if (tab === "today") return bundle.hourly.slice(0, 8);
-    if (tab === "tomorrow") return bundle.hourly.slice(8, 16);
-    return [];
-  };
-
   return (
     <div className="home-page">
       <SearchBar onSelect={handleSelectSearch} />
@@ -118,13 +110,15 @@ export default function Home() {
         rainChance={bundle.current.precipitationProbability}
       />
 
-      <ForecastTabs active={tab} onChange={setTab} />
+      <div className="forecast-section">
+        <h3 className="forecast-section-title">Hourly weather</h3>
+        <HourlyForecast hours={bundle.hourly.slice(0, 20)} unit={unit} />
+      </div>
 
-      {tab === "next3" ? (
-        <DailyForecast days={bundle.daily.slice(1, 4)} unit={unit} />
-      ) : (
-        <HourlyForecast hours={hoursForTab()} unit={unit} />
-      )}
+      <div className="forecast-section">
+        <h3 className="forecast-section-title">Daily weather</h3>
+        <DailyForecast days={bundle.daily.slice(0, 7)} unit={unit} />
+      </div>
 
       <div className="single-page-section">
         <div className="single-page-section-header">

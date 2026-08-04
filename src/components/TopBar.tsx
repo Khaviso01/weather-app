@@ -1,5 +1,6 @@
-import { MapPin, WifiOff } from "lucide-react";
+import { MapPin, Moon, Sun, WifiOff } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useApp } from "../context/AppContext";
 
 interface Props {
   locationName: string;
@@ -7,18 +8,33 @@ interface Props {
 }
 
 export default function TopBar({ locationName, isOnline }: Props) {
+  const { theme, setTheme } = useApp();
+  const isDark = theme === "dark";
+
   return (
     <div className="top-bar">
       <Link to="/locations" className="top-bar-link" aria-label="Change location">
         <MapPin size={16} className="text-app-accent" />
         <span className="top-bar-location">{locationName}</span>
       </Link>
-      {!isOnline && (
-        <div className="top-bar-offline">
-          <WifiOff size={12} />
-          Offline
-        </div>
-      )}
+
+      <div className="top-bar-actions">
+        <button
+          type="button"
+          className="top-bar-theme-toggle"
+          onClick={() => setTheme(isDark ? "light" : "dark")}
+          aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
+        >
+          {isDark ? <Sun size={14} /> : <Moon size={14} />}
+        </button>
+
+        {!isOnline && (
+          <div className="top-bar-offline">
+            <WifiOff size={12} />
+            Offline
+          </div>
+        )}
+      </div>
     </div>
   );
 }
