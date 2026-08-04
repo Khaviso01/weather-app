@@ -101,6 +101,7 @@ button {
   flex: 1;
   overflow-y: auto;
   padding: 0 1rem;
+  margin-bottom: 1rem;
 }
 
 .app-shell-main::-webkit-scrollbar {
@@ -973,14 +974,7 @@ button {
   top: 1rem;
   left: 50%;
   transform: translateX(-50%);
-  z-index: 50;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  align-items: center;
-  width: 100%;
-  padding: 0 1rem;
-  pointer-events: none;
+  z-index: 1000;
 }
 
 .toast {
