@@ -59,8 +59,7 @@ The app uses WeatherAPI's forecast and search endpoints:
 
 **Real-time weather info**
 - Current temperature, condition, wind speed, humidity, and rain chance
-- Hourly and multi-day forecasts
-- Today / Tomorrow / Next 3 Days toggle to switch views
+- Hourly and multi-day forecasts for the next 7 days
 
 **Location-based forecasting**
 - "Use current location" requests browser geolocation, reverse-geocodes it
@@ -116,3 +115,8 @@ and components share it via the `useApp()` hook rather than prop-drilling.
 The app renders as a centered "phone" card that scales fluidly from 320px
 up through desktop widths (tested at 320 / 480 / 768 / 1024 / 1200px), so
 the same layout works standalone on mobile or embedded in a wider viewport.
+
+## Author
+Khaviso Vukeya
+- **LinkedIn** — [linkedin.com](www.linkedin.com/in/khaviso-vukeya-81b0a9320)
+- **Portfolio** — [Click here](https://khaviso-vukeya-portfolio.vercel.app/))
