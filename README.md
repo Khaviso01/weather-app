@@ -119,4 +119,4 @@ the same layout works standalone on mobile or embedded in a wider viewport.
 ## Author
 Khaviso Vukeya
 - **LinkedIn** — [linkedin.com](www.linkedin.com/in/khaviso-vukeya-81b0a9320)
-- **Portfolio** — [Click here](https://khaviso-vukeya-portfolio.vercel.app/))
+- **Portfolio** — [Click here](https://khaviso-vukeya-portfolio.vercel.app/)
