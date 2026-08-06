@@ -8,8 +8,9 @@ interface Props {
 }
 
 export default function TopBar({ locationName, isOnline }: Props) {
-  const { theme, setTheme } = useApp();
+  const { theme, setTheme, unit, setUnit } = useApp();
   const isDark = theme === "dark";
+  const isCelsius = unit === "C";
 
   return (
     <div className="top-bar">
@@ -19,6 +20,16 @@ export default function TopBar({ locationName, isOnline }: Props) {
       </Link>
 
       <div className="top-bar-actions">
+        <button
+          type="button"
+          className="top-bar-unit-toggle"
+          onClick={() => setUnit(isCelsius ? "F" : "C")}
+          aria-label={isCelsius ? "Switch to Fahrenheit" : "Switch to Celsius"}
+        >
+          <span className={isCelsius ? "active" : ""}>°C</span>
+          <span className={!isCelsius ? "active" : ""}>°F</span>
+        </button>
+
         <button
           type="button"
           className="top-bar-theme-toggle"

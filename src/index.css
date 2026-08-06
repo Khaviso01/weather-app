@@ -176,6 +176,35 @@ button {
   gap: 0.5rem;
 }
 
+.top-bar-unit-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  padding: 0.2rem;
+  border: 1px solid var(--app-border);
+  border-radius: 999px;
+  background: var(--app-card);
+  cursor: pointer;
+}
+
+.top-bar-unit-toggle span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--app-muted);
+  transition: background-color 150ms ease, color 150ms ease;
+}
+
+.top-bar-unit-toggle span.active {
+  background: var(--app-accent);
+  color: white;
+}
+
 .top-bar-theme-toggle {
   display: inline-flex;
   align-items: center;
