@@ -85,7 +85,7 @@ button {
 .app-shell-card {
   position: relative;
   width: 100%;
-  max-width: 400px;
+  max-width: 800px;
   max-height: 900px;
   height: 92dvh;
   background: var(--app-bg);
@@ -343,32 +343,6 @@ button {
   margin: 0 0 0.75rem;
 }
 
-.forecast-tabs {
-  display: flex;
-  align-items: center;
-  gap: 1.25rem;
-  margin-top: 1.5rem;
-  padding: 0 0.25rem;
-}
-
-.forecast-tab {
-  position: relative;
-  padding-bottom: 0.4rem;
-  font-size: 0.95rem;
-  cursor: pointer;
-  color: var(--app-muted);
-  background: none;
-}
-
-.forecast-tab.active {
-  color: var(--app-text);
-  font-weight: 600;
-}
-
-.forecast-tab:hover {
-  color: var(--app-text);
-}
-
 .daily-forecast,
 .hourly-forecast {
   display: flex;
@@ -521,6 +495,11 @@ button {
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
+}
+
+.empty-state-button:hover,
+.locations-add-button:hover {
+  color: #f5f6f8;
 }
 
 .empty-state-button:disabled,
@@ -741,34 +720,6 @@ button {
 
 .settings-clear-button:hover {
   opacity: 0.95;
-}
-
-.segmented-control {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 0.8rem;
-  padding: 0.25rem;
-}
-
-.segmented-option {
-  padding: 0.45rem 0.7rem;
-  border-radius: 0.6rem;
-  font-size: 0.75rem;
-  font-weight: 600;
-  cursor: pointer;
-  color: var(--app-muted);
-  background: transparent;
-}
-
-.segmented-option.active {
-  background: var(--app-accent);
-  color: #000;
-}
-
-.segmented-option:hover {
-  color: var(--app-text);
 }
 
 .skeleton {
@@ -1068,4 +1019,3 @@ button {
     transition-duration: 0.001ms !important;
   }
 }
-
