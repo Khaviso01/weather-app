@@ -93,9 +93,9 @@ The app uses WeatherAPI's forecast and search endpoints:
 src/
   api/            WeatherAPI fetch + lookup helpers
   components/      Reusable UI: WeatherIcon, WeatherHero, StatsRow,
-                    ForecastTabs, HourlyForecast, DailyForecast,
+                     HourlyForecast, DailyForecast,
                     SearchBar, LocationCard, TopBar, AlertBanner,
-                    ToggleSwitch, SegmentedControl, AppShell,
+                    , AppShell,
                     ApiKeySetupNotice, ...
   context/        AppContext (locations/theme/units/cache) and
                     ToastContext (in-app notifications)
