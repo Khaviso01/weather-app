@@ -100,7 +100,7 @@ src/
   context/        AppContext (locations/theme/units/cache) and
                     ToastContext (in-app notifications)
   hooks/          useLocalStorage
-  pages/          Home, Locations, Settings
+  pages/          Home
   types/          Shared TypeScript types
   utils/          Weather-code -> condition mapping, alert derivation
 ```
