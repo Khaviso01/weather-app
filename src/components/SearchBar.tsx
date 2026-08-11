@@ -24,7 +24,7 @@ export default function SearchBar({ onSelect, placeholder = "Search for a city" 
   useEffect(() => {
     if (debounceRef.current) clearTimeout(debounceRef.current);
     if (!query.trim()) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect -- clearing stale results when the query is emptied is intentional
+      
       setResults([]);
       setError(null);
       setLoading(false);

@@ -487,6 +487,7 @@ button {
   background: var(--app-accent);
   color: #000;
   font-weight: 600;
+  margin-bottom: 1.5rem;
   font-size: 0.95rem;
   border-radius: 1rem;
   padding: 0.8rem 1rem;

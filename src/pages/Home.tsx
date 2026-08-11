@@ -84,7 +84,9 @@ export default function Home() {
   return (
     <div className="home-page">
       <SearchBar onSelect={handleSelectSearch} />
-
+      <button onClick={requestGeolocation} disabled={geoStatus === "requesting"} className="locations-add-button">
+          {geoStatus === "requesting" ? "Locating…" : "Use current location"}
+        </button>
       <AlertBanner alerts={alerts} />
       <TopBar
         locationName={
@@ -124,10 +126,6 @@ export default function Home() {
         <div className="single-page-section-header">
           <h3 className="single-page-section-title">Saved Locations</h3>
         </div>
-
-        <button onClick={requestGeolocation} disabled={geoStatus === "requesting"} className="locations-add-button">
-          {geoStatus === "requesting" ? "Locating…" : "Use current location"}
-        </button>
 
         <div className="locations-list">
           {locations.map((loc) => (
