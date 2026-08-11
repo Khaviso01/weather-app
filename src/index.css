@@ -191,7 +191,7 @@ button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 1.6rem;
+  min-width: 2.6rem;
   height: 1.6rem;
   border-radius: 999px;
   font-size: 0.7rem;
@@ -236,7 +236,7 @@ button {
 }
 
 .top-bar-location {
-  font-size: 0.9rem;
+  font-size: 1.5rem;
   font-weight: 500;
 }
 

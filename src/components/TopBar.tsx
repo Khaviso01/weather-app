@@ -15,7 +15,7 @@ export default function TopBar({ locationName, isOnline }: Props) {
   return (
     <div className="top-bar">
       <Link to="/locations" className="top-bar-link" aria-label="Change location">
-        <MapPin size={16} className="text-app-accent" />
+        <MapPin size={20} className="text-app-accent" />
         <span className="top-bar-location">{locationName}</span>
       </Link>
 
