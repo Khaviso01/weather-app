@@ -33,6 +33,9 @@ export interface CurrentWeather {
   windSpeed: number;
   humidity: number;
   precipitationProbability: number;
+  pressure: number;
+  pressureMax: number;
+  pressureMin: number;
   isDay: boolean;
   time: string;
 }

@@ -21,7 +21,7 @@ interface AppContextValue {
   addLocation: (loc: Omit<SavedLocation, "id">) => string;
   removeLocation: (id: string) => void;
   weatherFor: (id: string) => CacheEntry | undefined;
-  refreshLocation: (id: string) => Promise<void>;
+  refreshLocation: (id: string, coords?: { latitude: number; longitude: number }) => Promise<void>;
   refreshAll: () => Promise<void>;
   isOnline: boolean;
   isRefreshing: boolean;
@@ -89,8 +89,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
   );
 
   const refreshLocation = useCallback(
-    async (id: string) => {
-      const loc = locations.find((l) => l.id === id);
+    async (id: string, coords?: { latitude: number; longitude: number }) => {
+      const loc = coords ?? locations.find((l) => l.id === id);
       if (!loc) return;
       if (!hasApiKey()) return;
       if (!navigator.onLine) {
@@ -120,7 +120,6 @@ export function AppProvider({ children }: { children: ReactNode }) {
             const bundle = await fetchWeather(loc.latitude, loc.longitude);
             setCache((prev) => ({ ...prev, [loc.id]: { bundle, fetchedAt: Date.now() } }));
           } catch {
-            /* keep stale cache for this location */
           }
         })
       );
@@ -186,11 +185,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
   // Fetch weather whenever the active location changes or a new location is added
   useEffect(() => {
     if (activeLocationId) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect -- fetching the forecast for the newly active location is the intended behavior
       refreshLocation(activeLocationId);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeLocationId, locations.length]);
+  }, [activeLocationId, refreshLocation]);
 
   useEffect(() => {
     setApiKey(apiKey);

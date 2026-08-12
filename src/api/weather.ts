@@ -85,6 +85,7 @@ interface RawCurrentResponse {
   condition: RawCondition;
   wind_kph: number;
   humidity: number;
+  pressure_mb?: number;
 }
 
 interface RawForecastHour {
@@ -95,6 +96,7 @@ interface RawForecastHour {
   chance_of_snow?: number;
   precip_mm: number;
   is_day: 0 | 1;
+  pressure_mb?: number;
 }
 
 interface RawForecastDay {
@@ -133,12 +135,20 @@ export async function fetchWeather(lat: number, lon: number): Promise<WeatherBun
     Math.abs(entry.time_epoch - nowSeconds) < Math.abs(closest.time_epoch - nowSeconds) ? entry : closest
   );
 
+  const todayHours = forecastDays[0]?.hour ?? [];
+  const pressureValues = todayHours.map((hour) => Math.round(hour.pressure_mb ?? 0)).filter(Boolean);
+  const pressureMax = pressureValues.length ? Math.max(...pressureValues) : Math.round(currentData.pressure_mb ?? 0);
+  const pressureMin = pressureValues.length ? Math.min(...pressureValues) : Math.round(currentData.pressure_mb ?? 0);
+
   const current = {
     temperature: Math.round(currentData.temp_c),
     weatherCode: currentData.condition.code,
     description: currentData.condition.text,
     windSpeed: Math.round(currentData.wind_kph / 3.6),
     humidity: Math.round(currentData.humidity),
+    pressure: Math.round(currentData.pressure_mb ?? 0),
+    pressureMax,
+    pressureMin,
     precipitationProbability: Math.round(nearestForecast.chance_of_rain ?? nearestForecast.chance_of_snow ?? 0),
     isDay: currentData.is_day === 1,
     time: new Date(nowSeconds * 1000).toISOString(),
