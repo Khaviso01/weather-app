@@ -112,9 +112,9 @@ and components share it via the `useApp()` hook rather than prop-drilling.
 
 ## Responsiveness
 
-The app renders as a centered "phone" card that scales fluidly from 320px
+The app renders as a centered standalone card that scales fluidly from 320px
 up through desktop widths (tested at 320 / 480 / 768 / 1024 / 1200px), so
-the same layout works standalone on mobile or embedded in a wider viewport.
+the same layout works on mobile or embedded in a wider viewport.
 
 ## Author
 Khaviso Vukeya
