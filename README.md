@@ -3,6 +3,11 @@
 A weather app built with React, TypeScript, and Vite. Live weather data comes from the
 [WeatherAPI](https://www.weatherapi.com/) API.
 
+# Preview
+
+<img src="public/weather-app-preview.png" alt="Alt text" width="500">
+
+
 ## Getting started
 
 1. **Get a free API key**
