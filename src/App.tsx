@@ -11,7 +11,6 @@ export default function App() {
         <BrowserRouter>
           <AppShell>
             <Routes>
-              
               <Route path="/" element={<Home />} />
             </Routes>
           </AppShell>

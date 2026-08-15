@@ -85,16 +85,13 @@ button {
 .app-shell-card {
   position: relative;
   width: 100%;
-  max-width: 700px;
+  max-width: 900px;
   max-height: 900px;
   height: 92dvh;
-  background: var(--app-bg);
   border-radius: 2.25rem;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.28);
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  border: 1px solid var(--app-border);
 }
 
 .app-shell-main {
@@ -599,7 +596,7 @@ button {
   position: sticky;
   top: 0;
   z-index: 100;
-  background: var(--app-bg);
+  background: var(--app-bg-outer);
   padding: 1rem 0;
 }
 
