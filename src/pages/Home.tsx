@@ -219,7 +219,7 @@ export default function Home() {
 
       <div className="single-page-section">
         <div className="single-page-section-header">
-          <h3 className="single-page-section-title">Saved Locations</h3>
+          <h3 className="single-page-section-title">Locations</h3>
         </div>
 
         <div className="locations-list">
