@@ -1,127 +1,286 @@
-# Weather App
+# Weather App 
 
-A weather app built with React, TypeScript, and Vite. Live weather data comes from the
-[WeatherAPI](https://www.weatherapi.com/) API.
+A modern, responsive weather application built with **React 19**, **TypeScript**, and **Vite**. Get real-time weather data and multi-day forecasts for multiple locations with a beautiful, intuitive interface.
 
-# Preview
+Live weather data is powered by the [WeatherAPI](https://www.weatherapi.com/) API, and all your data stays private—stored locally in your browser with zero backend tracking.
 
-<img src="public/weather-app-preview.png" alt="Alt text" width="500">
+## Preview
+
+<img src="public/weather-app-preview.png" alt="Weather App Preview" width="500">
 
 
-## Getting started
+## Features
+
+- **Real-Time Weather Data** — Current conditions, wind speed, humidity, precipitation chance, and more
+- **Multi-Day Forecasts** — 7-day forecast with hourly breakdowns for detailed planning
+- **Location Management** — Save and switch between multiple locations instantly
+- **Geolocation Support** — Auto-detect your current location with browser permissions
+- **Smart Search** — Search-as-you-type city lookup with debouncing
+- **Weather Alerts** — Intelligent client-side alerts for extreme conditions (high winds, storms, heavy rain, snow)
+- **Push Notifications** — Optional browser notifications for weather alerts
+- **Dark/Light Theme** — Customizable UI theme to match your preference
+- **Temperature Units** — Toggle between Celsius and Fahrenheit
+- **Fully Responsive** — Works seamlessly on mobile (320px+) and desktop
+- **Privacy-First** — No backend server, no analytics, no data tracking—everything stays in your browser
+
+## Getting Started
+
+### Prerequisites
+
+- **Node.js** (v16 or higher)
+- **npm** or **yarn** package manager
+- A free API key from [WeatherAPI](https://www.weatherapi.com/)
+
+### Installation
 
 1. **Get a free API key**
-   - Sign up at [weatherapi.com](https://www.weatherapi.com/)
-   - Copy your key from the account dashboard
+   - Visit [weatherapi.com](https://www.weatherapi.com/)
+   - Sign up for a free account
+   - Copy your API key from your account dashboard
 
-2. **Configure the app**
+2. **Clone and setup the project**
+   ```bash
+   git clone <repository-url>
+   cd weather-app
+   npm install
+   ```
 
-   Copy the example env file and paste in your key:
-
+3. **Configure environment variables**
    ```bash
    cp .env.example .env
    ```
-
-   Then edit `.env`:
-
+   Edit `.env` and add your API key:
    ```
-   VITE_WEATHERAPI_KEY=your_key_here
+   VITE_WEATHERAPI_KEY=your_api_key_here
    ```
 
-3. **Install and run**
-
+4. **Start the development server**
    ```bash
-   npm install
    npm run dev
    ```
+   The app will open at `http://localhost:5173` (or next available port)
 
-Other scripts:
+### Available Scripts
 
 ```bash
-npm run build     # type-check and build for production
-npm run preview   # preview the production build locally
-npm run lint       # run ESLint
+npm run dev       # Start development server
+npm run build     # Type-check and build for production
+npm run preview   # Preview the production build locally
+npm run lint      # Run ESLint to check code quality
 ```
 
-## Tech stack
+## API Configuration
 
-- **React 19 + TypeScript** — component-based UI with full type safety
-- **Vite** — dev server and build tooling
-- **lucide-react** — icon set for UI chrome (nav, stats, alerts)
-- **WeatherAPI** — current conditions, multi-day forecast, and
-  search/reverse lookup for saved locations and current geolocation
-- **localStorage** — the sole data store (no backend), used for saved
-  locations, active location, theme, units, and cached forecasts
+### Getting Your WeatherAPI Key
 
-## Which WeatherAPI endpoints are used
+1. Go to [weatherapi.com](https://www.weatherapi.com/)
+2. Click "Sign Up" and create a free account
+3. Navigate to your dashboard and find the "API Key" section
+4. Copy your key and paste it into your `.env` file
 
-The app uses WeatherAPI's forecast and search endpoints:
+**Note:** The free tier is sufficient for personal use and includes:
+- Current weather data
+- 7-day forecast
+- Location search
+- Unlimited API calls
 
-- `GET /forecast.json` — current conditions plus multi-day forecast data
-- `GET /search.json` — location search and reverse lookup by lat/lon
+For production use or higher limits, consider upgrading to a paid plan.
 
-## How it meets the brief
+## Tech Stack
 
-**Real-time weather info**
-- Current temperature, condition, wind speed, humidity, and rain chance
-- Hourly and multi-day forecasts for the next 7 days
+| Technology | Purpose |
+|------------|---------|
+| **React 19** | Component-based UI framework with hooks |
+| **TypeScript** | Full type safety and better developer experience |
+| **Vite** | Lightning-fast dev server and optimized production builds |
+| **lucide-react** | Beautiful, consistent icon library |
+| **WeatherAPI** | Real-time weather data and forecasting |
+| **localStorage** | Client-side data persistence (locations, settings, cache) |
+| **ESLint** | Code quality and style consistency |
 
-**Location-based forecasting**
-- "Use current location" requests browser geolocation, reverse-geocodes it
-  to a place name, and fetches its forecast
-- Search-as-you-type city lookup (debounces, via WeatherAPI's search API)
-- Every location (current or searched) is saved and revisitable from the
-  Locations page
+## WeatherAPI Endpoints Used
 
-**Weather alerts**
-- Alerts are derived client-side from live conditions (high wind,
-  thunderstorms, heavy rain, snow/freezing) and shown as an in-app banner
-- Settings lets you opt in to real browser push notifications
-  (`Notification` API) for these alerts
+The app leverages two key WeatherAPI endpoints to fetch all weather data:
 
-**Multiple locations**
-- Locations page lists every saved location with a live mini-forecast,
-  lets you switch the active one, and remove any (except "current location")
+| Endpoint | Purpose | Use Case |
+|----------|---------|----------|
+| `GET /forecast.json` | Retrieves current conditions + 7-day forecast | Fetching detailed weather for a location |
+| `GET /search.json` | Location search and reverse lat/lon lookup | Finding locations by name or coordinates |
 
-**Customization**
-- Settings page toggles theme (dark/light)
+## How It Works
 
-**Privacy**
-- No backend, no analytics, no third-party data collection — everything
-  lives in the browser's `localStorage`. This is called out directly in
-  Settings. Your API key stays in your local `.env` file and is never
-  committed (see `.gitignore`).
+### Current Location
+When you click "Use Current Location," the app:
+1. Requests browser geolocation permission
+2. Gets your lat/lon coordinates
+3. Reverse-geocodes to find your city name
+4. Fetches weather data and saves the location
 
-## Project structure
+### Search & Save Locations
+- Type any city name in the search bar
+- Results appear in real-time (debounced to reduce API calls)
+- Click a result to view its forecast
+- Location is automatically saved for future reference
+- Access all saved locations from the Locations page
+
+### Weather Alerts
+Alerts are generated on the client-side by analyzing live conditions:
+- **High Wind** — Wind gusts exceed 40 km/h
+- **Thunderstorms** — Lightning detected in forecast
+- **Heavy Rain** — Precipitation chance exceeds 80%
+- **Snow/Freezing** — Snow expected or temperature near/below freezing
+
+Enable push notifications in Settings to receive browser alerts.
+
+## Project Structure
 
 ```
 src/
-  api/            WeatherAPI fetch + lookup helpers
-  components/      Reusable UI: WeatherIcon, WeatherHero, StatsRow,
-                     HourlyForecast, DailyForecast,
-                    SearchBar, LocationCard, TopBar, AlertBanner,
-                    , AppShell,
-                    ApiKeySetupNotice, ...
-  context/        AppContext (locations/theme/units/cache) and
-                    ToastContext (in-app notifications)
-  hooks/          useLocalStorage
-  pages/          Home
-  types/          Shared TypeScript types
-  utils/          Weather-code -> condition mapping, alert derivation
+├── api/              WeatherAPI fetch helpers and location lookup
+├── components/       Reusable UI components
+│   ├── AlertBanner        In-app alert notifications
+│   ├── WeatherHero        Large weather display card
+│   ├── HourlyForecast     Hourly weather breakdown
+│   ├── DailyForecast      Multi-day forecast grid
+│   ├── SearchBar          Location search with autocomplete
+│   ├── LocationCard       Saved location preview
+│   ├── SkeletonLoader     Loading placeholders
+│   ├── StatsRow           Weather stats display
+│   ├── WeatherIcon        Dynamic weather icon renderer
+│   ├── TopBar             Navigation header
+│   ├── AppShell           Main layout container
+│   └── EmptyLocationState  Empty state UI
+├── context/          App-wide state management
+│   ├── AppContext         Locations, theme, units, cache
+│   └── ToastContext       In-app notifications
+├── hooks/            Custom React hooks
+│   └── useLocalStorage    Persistent state hook
+├── pages/            Page components
+│   └── Home              Main weather view
+├── types/            TypeScript type definitions
+│   └── weather.ts        Weather data types
+├── utils/            Utility functions
+│   ├── alerts.ts         Alert derivation logic
+│   └── weatherCode.ts    Weather condition mapping
+├── App.tsx           Root component
+├── main.tsx          App entry point
+└── index.css         Global styles
 ```
 
-Components are built to be reusable and prop-driven (e.g. `WeatherIcon`,
-`SegmentedControl`, `LocationCard`, `SettingsRow`), and app-wide state
-(locations, theme, units, weather cache) lives in `AppContext` so pages
-and components share it via the `useApp()` hook rather than prop-drilling.
+### Architecture Highlights
 
-## Responsiveness
+**State Management**
+- Uses React Context API via `AppContext` for app-wide state (locations, theme, units, weather cache)
+- `useApp()` hook provides access to context without prop drilling
+- `ToastContext` manages in-app notifications separately
 
-The app renders as a centered standalone card that scales fluidly from 320px
-up through desktop widths (tested at 320 / 480 / 768 / 1024 / 1200px), so
-the same layout works on mobile or embedded in a wider viewport.
+**Component Design**
+- All components are reusable and prop-driven
+- Example: `WeatherIcon` renders the correct icon based on weather condition code
+- `LocationCard`, `StatsRow`, and other components are highly composable
+
+**Data Persistence**
+- `useLocalStorage` hook syncs app state with browser storage
+- Saves: locations, active location, theme preference, units (C/F), API responses
+- No backend required—everything is client-side
+
+## Responsiveness & Browser Support
+
+### Responsive Design
+The app is built mobile-first and scales fluidly across all device sizes:
+- **Mobile** (320px+) — Optimized touch interface
+- **Tablet** (480-768px) — Tablet-friendly layout
+- **Desktop** (1024px+) — Full-featured desktop experience
+
+The centered card layout maintains visual hierarchy and usability at all breakpoints.
+
+### Browser Compatibility
+- **Modern browsers only** — Requires ES2020+ support
+- **Chrome/Brave** 90+
+- **Firefox** 88+
+- **Safari** 14+
+- **Edge** 90+
+
+**Required APIs:**
+- `localStorage` — For data persistence
+- `Geolocation API` — For "Use Current Location"
+- `Notification API` — For push notifications (optional)
+
+## Troubleshooting
+
+### Common Issues
+
+**"API Key not found" error**
+- Ensure you've created `.env` file in the root directory
+- Check that `VITE_WEATHERAPI_KEY` is spelled correctly
+- Restart the dev server after changing `.env`
+
+**No location data appears**
+- Verify your API key is valid at weatherapi.com
+- Check browser console for network errors
+- Ensure API quota hasn't been exceeded
+
+**Geolocation not working**
+- Allow location access when prompted by browser
+- Only works over HTTPS in production (HTTP for localhost dev)
+- Check browser privacy settings
+
+**Data not persisting**
+- Check if localStorage is enabled in browser
+- Ensure you're not in private/incognito mode
+- Clear browser cache if experiencing issues
+
+**Build fails**
+- Run `npm install` to ensure all dependencies are installed
+- Delete `node_modules` and `package-lock.json`, then reinstall
+- Check Node.js version: `node --version` (should be 16+)
+
+## Privacy & Security
+
+✅ **Zero data collection** — No analytics, no tracking, no third-party scripts
+✅ **Local-only storage** — Everything saved in browser localStorage
+✅ **No backend server** — Reduced attack surface
+✅ **API key protection** — Stored in `.env`, never committed to git
+✅ **Transparent practices** — Privacy statement visible in Settings
+
+## Development
+
+### Code Quality
+- **TypeScript** — Strict type checking for fewer runtime errors
+- **ESLint** — Consistent code style and best practices
+- **React 19** — Latest features and performance improvements
+- **Vite** — Fast HMR (hot module replacement) for quick development
+
+### Building for Production
+```bash
+npm run build
+npm run preview  # Test production build locally
+```
+
+The build outputs to `dist/` with optimized bundles ready for deployment.
+
+### Deployment
+This is a static site—deploy to any static host:
+- **Vercel** — `vercel deploy`
+- **Netlify** — Connect GitHub repo
+- **GitHub Pages** — Push to gh-pages branch
+- **Any CDN** — Upload contents of `dist/` folder
+
+Remember to set your API key as an environment variable in your hosting platform!
+
+## Future Enhancements
+
+Potential features for future versions:
+- 14-day forecast
+- Radar maps and weather animations
+- Historical weather data
+- Weather trends and analytics
+- Multi-language support
+- Custom alert thresholds
+- Weather comparison between locations
 
 ## Author
-Khaviso Vukeya
-- [LinkedIn](www.linkedin.com/in/khaviso-vukeya-81b0a9320)
+
+**Khaviso Vukeya**
+- [LinkedIn](https://www.linkedin.com/in/khaviso-vukeya-81b0a9320)
 - [Portfolio](https://khaviso-vukeya-portfolio.vercel.app/)
