@@ -237,11 +237,11 @@ The centered card layout maintains visual hierarchy and usability at all breakpo
 
 ## Privacy & Security
 
-✅ **Zero data collection** — No analytics, no tracking, no third-party scripts
-✅ **Local-only storage** — Everything saved in browser localStorage
-✅ **No backend server** — Reduced attack surface
-✅ **API key protection** — Stored in `.env`, never committed to git
-✅ **Transparent practices** — Privacy statement visible in Settings
+**Zero data collection** — No analytics, no tracking, no third-party scripts
+**Local-only storage** — Everything saved in browser localStorage
+**No backend server** — Reduced attack surface
+**API key protection** — Stored in `.env`, never committed to git
+**Transparent practices** — Privacy statement visible in Settings
 
 ## Development
 
