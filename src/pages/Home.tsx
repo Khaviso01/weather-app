@@ -18,6 +18,7 @@ import type { SavedLocation, WeatherBundle } from "../types/weather";
 
 type PreviewLocation = Omit<SavedLocation, "id">;
 
+// Home component representing the main weather dashboard view
 export default function Home() {
   const {
     locations,
@@ -48,17 +49,20 @@ export default function Home() {
   const displayedLocation = previewLocation ? { ...previewLocation, id: previewId ?? "" } : activeLocation ?? null;
   const displayedEntry = previewLocation ? previewEntry : activeEntry?.bundle;
 
+  // Formats the current date label for display on the weather hero section
   const dateLabel = useMemo(() => {
     const d = new Date();
     return d.toLocaleDateString("en-US", { day: "2-digit", month: "long", year: "numeric" });
   }, []);
 
+  // Requests geolocation automatically if no locations are saved yet
   useEffect(() => {
     if (locations.length === 0 && geoStatus === "idle") {
       requestGeolocation();
     }
   }, [geoStatus, locations.length, requestGeolocation]);
 
+  // Fetches weather data when a preview location is selected
   useEffect(() => {
     if (!previewLocation) {
       setPreviewEntry(null);
@@ -92,6 +96,7 @@ export default function Home() {
     };
   }, [previewLocation, showToast]);
 
+  // Handles selecting a location from the search bar to preview
   function handleSelectSearch(loc: PreviewLocation) {
     setPreviewLocation(loc);
     setPreviewEntry(null);
@@ -100,6 +105,7 @@ export default function Home() {
     setShowPreviewBanner(true);
   }
 
+  // Handles switching to a saved location view
   function handleSelect(id: string) {
     setActiveLocationId(id);
     setPreviewLocation(null);
@@ -108,6 +114,7 @@ export default function Home() {
     setIsPreviewLoading(false);
   }
 
+  // Saves the currently previewed location to stored locations
   function handleSavePreview() {
     if (!previewLocation) return;
     const id = addLocation(previewLocation);
@@ -119,15 +126,18 @@ export default function Home() {
     showToast(`${previewLocation.name} saved`, "success");
   }
 
+  // Removes a saved location from the list
   function handleRemove(id: string, name: string) {
     removeLocation(id);
     showToast(`${name} removed`, "info");
   }
 
+  // Clears the current search preview banner
   function handleClearPreview() {
     setShowPreviewBanner(false);
   }
 
+  // Renders empty state if no locations are saved and no preview is active
   if (locations.length === 0 && !previewLocation) {
     return (
       <div className="home-loading">
@@ -141,7 +151,7 @@ export default function Home() {
     );
   }
 
-  
+  // Renders loading skeleton if data for the active/preview location is not yet ready
   if (!displayedEntry) {
     return (
       <div className="home-loading">

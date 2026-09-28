@@ -5,11 +5,13 @@ import { fetchWeather, reverseGeocode, hasApiKey, setApiKey } from "../api/weath
 import { useToast } from "./ToastContext";
 import { CURRENT_ID } from "../constants";
 
+// Interface representing a cached weather bundle with its fetch timestamp
 interface CacheEntry {
   bundle: WeatherBundle;
   fetchedAt: number;
 }
 
+// Interface representing the shape and value of the AppContext
 interface AppContextValue {
   theme: Theme;
   setTheme: (t: Theme) => void;
@@ -32,8 +34,10 @@ interface AppContextValue {
   apiKeyMissing: boolean;
 }
 
+// Context object for global application state
 const AppContext = createContext<AppContextValue | null>(null);
 
+// Determines the default system color theme preference
 function getDefaultTheme(): Theme {
   if (typeof window !== "undefined" && window.matchMedia?.("(prefers-color-scheme: dark)").matches) {
     return "dark";
@@ -41,6 +45,7 @@ function getDefaultTheme(): Theme {
   return "light";
 }
 
+// Provider component that wraps application components and manages global state
 export function AppProvider({ children }: { children: ReactNode }) {
   const { showToast } = useToast();
   const [theme, setTheme] = useLocalStorage<Theme>("weather:theme", getDefaultTheme);
@@ -58,11 +63,13 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [geoStatus, setGeoStatus] = useState<"idle" | "requesting" | "granted" | "denied">("idle");
   const requestedGeoRef = useRef(false);
 
+  // Effect to synchronize the HTML root class with the selected color theme
   useEffect(() => {
     document.documentElement.classList.toggle("light", theme === "light");
     document.documentElement.classList.toggle("dark", theme === "dark");
   }, [theme]);
 
+  // Adds a new location to the saved locations list
   const addLocation = useCallback(
     (loc: Omit<SavedLocation, "id">) => {
       const id = loc.isCurrent ? CURRENT_ID : `${loc.latitude.toFixed(3)},${loc.longitude.toFixed(3)}`;
@@ -75,6 +82,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     [setLocations]
   );
 
+  // Removes a location from saved locations and clears its cache
   const removeLocation = useCallback(
     (id: string) => {
       setLocations((prev) => prev.filter((l) => l.id !== id));
@@ -88,6 +96,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     [setLocations, setCache, setActiveLocationId]
   );
 
+  // Refreshes the weather bundle for a specific location ID
   const refreshLocation = useCallback(
     async (id: string, coords?: { latitude: number; longitude: number }) => {
       const loc = coords ?? locations.find((l) => l.id === id);
@@ -110,6 +119,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     [locations, setCache, showToast]
   );
 
+  // Refreshes weather data for all saved locations concurrently
   const refreshAll = useCallback(async () => {
     if (!navigator.onLine || !hasApiKey()) return;
     setIsRefreshing(true);
@@ -120,20 +130,20 @@ export function AppProvider({ children }: { children: ReactNode }) {
             const bundle = await fetchWeather(loc.latitude, loc.longitude);
             setCache((prev) => ({ ...prev, [loc.id]: { bundle, fetchedAt: Date.now() } }));
           } catch {
+            // Silently ignore individual location refresh errors in bulk updates
           }
         })
       );
     } finally {
       setIsRefreshing(false);
     }
-     
   }, [locations, setCache]);
 
+  // Effect to handle browser online/offline status changes
   useEffect(() => {
     const on = () => {
       setIsOnline(true);
       showToast("Back online — refreshing weather", "success");
-       
       refreshAll();
     };
     const off = () => {
@@ -146,11 +156,12 @@ export function AppProvider({ children }: { children: ReactNode }) {
       window.removeEventListener("online", on);
       window.removeEventListener("offline", off);
     };
-     
   }, [refreshAll, showToast]);
 
+  // Returns the cached weather entry for a given location ID
   const weatherFor = useCallback((id: string) => cache[id], [cache]);
 
+  // Requests browser geolocation permissions and retrieves user position
   const requestGeolocation = useCallback(() => {
     if (requestedGeoRef.current) return;
     requestedGeoRef.current = true;
@@ -182,17 +193,19 @@ export function AppProvider({ children }: { children: ReactNode }) {
     );
   }, [setLocations, setActiveLocationId, showToast]);
 
-  // Fetch weather whenever the active location changes or a new location is added
+  // Fetch weather whenever the active location changes
   useEffect(() => {
     if (activeLocationId) {
       refreshLocation(activeLocationId);
     }
   }, [activeLocationId, refreshLocation]);
 
+  // Updates the module-level API key when the stored key changes
   useEffect(() => {
     setApiKey(apiKey);
   }, [apiKey]);
 
+  // Bundle value object provided to consumer components
   const value: AppContextValue = {
     theme,
     setTheme,
@@ -218,6 +231,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 }
 
+// Custom hook to easily consume the AppContext
 export function useApp() {
   const ctx = useContext(AppContext);
   if (!ctx) throw new Error("useApp must be used within AppProvider");

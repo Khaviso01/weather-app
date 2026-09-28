@@ -1,8 +1,10 @@
 import type { CurrentWeather, WeatherAlert } from "../types/weather";
 
+// Derives weather alerts based on current weather conditions and location name
 export function deriveAlerts(current: CurrentWeather, locationName: string): WeatherAlert[] {
   const alerts: WeatherAlert[] = [];
 
+  // Check for high wind conditions
   if (current.windSpeed >= 15) {
     alerts.push({
       id: "wind",
@@ -22,6 +24,7 @@ export function deriveAlerts(current: CurrentWeather, locationName: string): Wea
     1237, 1255, 1258, 1261, 1264, 1279, 1282,
   ]);
 
+  // Check for thunderstorm conditions
   if (thunderCodes.includes(current.weatherCode)) {
     alerts.push({
       id: "thunder",
@@ -31,6 +34,7 @@ export function deriveAlerts(current: CurrentWeather, locationName: string): Wea
     });
   }
 
+  // Check for heavy rain conditions
   if (current.precipitationProbability >= 80 && rainCodes.has(current.weatherCode)) {
     alerts.push({
       id: "rain",
@@ -40,6 +44,7 @@ export function deriveAlerts(current: CurrentWeather, locationName: string): Wea
     });
   }
 
+  // Check for snow conditions
   if (current.temperature <= 0 && snowCodes.has(current.weatherCode)) {
     alerts.push({
       id: "snow",

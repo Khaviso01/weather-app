@@ -1,5 +1,6 @@
 import type { Condition } from "../utils/weatherCode";
 
+// Props definition for the WeatherIcon component
 interface Props {
   condition: Condition;
   isDay?: boolean;
@@ -7,6 +8,7 @@ interface Props {
   className?: string;
 }
 
+// Component that renders dynamic SVG weather condition icons
 export default function WeatherIcon({ condition, isDay = true, size = 64, className = "" }: Props) {
   const s = size;
   const cloudFill = "#F4F5F7";
@@ -17,6 +19,7 @@ export default function WeatherIcon({ condition, isDay = true, size = 64, classN
   const snow = "#EAF4FF";
   const bolt = "#FFC94D";
 
+  // Helper sub-component for rendering cloud graphics
   const Cloud = ({ x = 0, y = 0, scale = 1 }: { x?: number; y?: number; scale?: number }) => (
     <g transform={`translate(${x} ${y}) scale(${scale})`}>
       <ellipse cx="34" cy="46" rx="27" ry="16" fill={cloudShadow} opacity="0.5" />
@@ -27,6 +30,7 @@ export default function WeatherIcon({ condition, isDay = true, size = 64, classN
     </g>
   );
 
+  // Helper sub-component for rendering sparkles around the sun or moon
   const Sparkles = () => (
     <g fill={sun}>
       <path d="M52 10l1.3 3.7L57 15l-3.7 1.3L52 20l-1.3-3.7L47 15l3.7-1.3z" opacity="0.9" />
@@ -35,6 +39,7 @@ export default function WeatherIcon({ condition, isDay = true, size = 64, classN
     </g>
   );
 
+  //Renders the appropriate SVG content based on the weather condition and time of day
   const renderContent = () => {
     switch (condition) {
       case "clear":

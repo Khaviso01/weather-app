@@ -1,3 +1,4 @@
+// Rendering placeholder loading skeleton layout
 export default function SkeletonLoader() {
   return (
     <div className="skeleton">

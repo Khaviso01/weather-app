@@ -4,6 +4,7 @@ import { codeToCondition } from "../utils/weatherCode";
 import { celsiusToFahrenheit } from "../api/weather";
 import type { SavedLocation, WeatherBundle, TempUnit } from "../types/weather";
 
+// Props definition for location card
 interface Props {
   location: SavedLocation;
   bundle?: WeatherBundle;
@@ -13,7 +14,9 @@ interface Props {
   onRemove: () => void;
 }
 
+// Rendering saved locations and current location
 export default function LocationCard({ location, bundle, unit, active, onSelect, onRemove }: Props) {
+  //calculating current temperature
   const temp = bundle
     ? unit === "C"
       ? bundle.current.temperature

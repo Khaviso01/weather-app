@@ -1,5 +1,3 @@
-// Maps WeatherAPI condition codes to the app's internal Condition type.
-// Reference: https://www.weatherapi.com/docs/weather_conditions.json
 
 export type Condition =
   | "clear"
@@ -22,6 +20,7 @@ const snowCodes = new Set([
   1237, 1255, 1258, 1261, 1264,
 ]);
 
+// Converts a WeatherAPI condition code into an internal Condition type
 export function codeToCondition(code: number): Condition {
   if (code === 1000) return "clear";
   if (code === 1003) return "partly-cloudy";
@@ -49,6 +48,7 @@ export function codeToLabel(code: number): string {
   return map[codeToCondition(code)];
 }
 
+// Capitalizes the first letter of each word in a given text string
 export function titleCase(text: string): string {
   return text.replace(/\b\w/g, (c) => c.toUpperCase());
 }

@@ -3,18 +3,23 @@ import { codeToCondition, titleCase } from "../utils/weatherCode";
 import { celsiusToFahrenheit } from "../api/weather";
 import type { DailyPoint, TempUnit } from "../types/weather";
 
+
+// Props definition for daily forecast
 interface Props {
   days: DailyPoint[];
   unit: TempUnit;
 }
 
+// Formats date string into readable weekday 
 function formatDay(iso: string, index: number) {
   if (index === 0) return "Today";
   const d = new Date(iso);
   return d.toLocaleDateString("en-US", { weekday: "long" });
 }
 
+// Rendering multiday forecast list
 export default function DailyForecast({ days, unit }: Props) {
+  // Converting celsius to fahrenheit if uni = F
   const conv = (c: number) => (unit === "C" ? c : celsiusToFahrenheit(c));
 
   return (

@@ -5,12 +5,15 @@ import { useToast } from "../context/ToastContext";
 import { useApp } from "../context/AppContext";
 import type { SavedLocation } from "../types/weather";
 
+// Props defnition for the Searchbar
 interface Props {
   onSelect: (loc: Omit<SavedLocation, "id">) => void;
   placeholder?: string;
 }
 
+// Rendering interctive search input with debouncing location results
 export default function SearchBar({ onSelect, placeholder = "Search for a city" }: Props) {
+  //state hooks for managing search queries
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<SavedLocation[]>([]);
   const [loading, setLoading] = useState(false);
@@ -21,6 +24,7 @@ export default function SearchBar({ onSelect, placeholder = "Search for a city" 
   const { showToast } = useToast();
   const { apiKeyMissing } = useApp();
 
+  // Effect hook to handle debounced API location upon search query
   useEffect(() => {
     if (debounceRef.current) clearTimeout(debounceRef.current);
     if (!query.trim()) {
@@ -64,6 +68,7 @@ export default function SearchBar({ onSelect, placeholder = "Search for a city" 
     };
   }, [query, apiKeyMissing, showToast]);
 
+  // Effect hook to close the dropdown when clicking outside the search container
   useEffect(() => {
     function handleClick(e: MouseEvent) {
       if (containerRef.current && !containerRef.current.contains(e.target as Node)) {

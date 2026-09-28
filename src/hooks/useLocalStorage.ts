@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
 
+// Type definition for the initial value or function used in localStorage state
 type InitialValue<T> = T | (() => T);
 
+// Custom hook to synchronize state with browser localStorage
 export function useLocalStorage<T>(key: string, initialValue: InitialValue<T>) {
+  // Initialize state from localStorage or fallback to the provided initial value
   const [value, setValue] = useState<T>(() => {
     try {
       const raw = window.localStorage.getItem(key);
@@ -13,11 +16,12 @@ export function useLocalStorage<T>(key: string, initialValue: InitialValue<T>) {
     }
   });
 
+  // Effect to update localStorage whenever the key or value changes
   useEffect(() => {
     try {
       window.localStorage.setItem(key, JSON.stringify(value));
     } catch {
-      // storage full or unavailable - fail silently, app still works in-memory
+   
     }
   }, [key, value]);
 

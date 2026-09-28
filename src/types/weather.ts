@@ -1,6 +1,9 @@
 export type TempUnit = "C" | "F";
+
+// Type definition for application theme appearance
 export type Theme = "dark" | "light";
 
+// Interface representing a saved geographical location
 export interface SavedLocation {
   id: string;
   name: string;
@@ -10,6 +13,7 @@ export interface SavedLocation {
   isCurrent?: boolean;
 }
 
+// Interface representing a single hourly forecast data point
 export interface HourlyPoint {
   time: string; // ISO
   temperature: number;
@@ -17,6 +21,7 @@ export interface HourlyPoint {
   precipitationProbability: number;
 }
 
+// Interface representing a single daily forecast summary
 export interface DailyPoint {
   date: string; // ISO date
   weatherCode: number;
@@ -26,6 +31,7 @@ export interface DailyPoint {
   precipitationProbability: number;
 }
 
+// Interface representing current weather conditions for a location
 export interface CurrentWeather {
   temperature: number;
   weatherCode: number;
@@ -40,6 +46,7 @@ export interface CurrentWeather {
   time: string;
 }
 
+// Interface grouping current, hourly, daily weather data and timezone information
 export interface WeatherBundle {
   current: CurrentWeather;
   hourly: HourlyPoint[];
@@ -47,6 +54,7 @@ export interface WeatherBundle {
   timezone: string;
 }
 
+// Interface representing a weather alert notification
 export interface WeatherAlert {
   id: string;
   title: string;

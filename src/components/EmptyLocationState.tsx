@@ -2,12 +2,14 @@ import { LocateFixed } from "lucide-react";
 import SearchBar from "./SearchBar";
 import type { SavedLocation } from "../types/weather";
 
+// Props definition for empty location
 interface Props {
   onUseLocation: () => void;
   onSelectSearch: (loc: Omit<SavedLocation, "id">) => void;
   geoStatus: "idle" | "requesting" | "granted" | "denied";
 }
 
+// Rendering placeholder state when no location is selected
 export default function EmptyLocationState({ onUseLocation, onSelectSearch, geoStatus }: Props) {
   return (
     <div className="empty-state">

@@ -1,6 +1,8 @@
 import { AlertTriangle } from "lucide-react";
 import type { WeatherAlert } from "../types/weather";
 
+
+// Function that renders banner for active weather alerts then return nothing if there are n alerts
 export default function AlertBanner({ alerts }: { alerts: WeatherAlert[] }) {
   if (alerts.length === 0) return null;
 

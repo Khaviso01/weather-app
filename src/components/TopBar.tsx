@@ -2,12 +2,15 @@ import { MapPin, Moon, Sun, WifiOff } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useApp } from "../context/AppContext";
 
+// Props definition for the TopBar component
 interface Props {
   locationName: string;
   isOnline: boolean;
 }
 
+// Component that renders the application top navigation bar with location, unit toggle, theme toggle, and offline indicator
 export default function TopBar({ locationName, isOnline }: Props) {
+  // Retrieve global theme and unit state setters from AppContext
   const { theme, setTheme, unit, setUnit } = useApp();
   const isDark = theme === "dark";
   const isCelsius = unit === "C";

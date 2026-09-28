@@ -3,11 +3,13 @@ import { codeToCondition } from "../utils/weatherCode";
 import { celsiusToFahrenheit } from "../api/weather";
 import type { HourlyPoint, TempUnit } from "../types/weather";
 
+// Props definition for hourly forecast
 interface Props {
   hours: HourlyPoint[];
   unit: TempUnit;
 }
 
+// formating date to concise 12-hour format
 function formatHour(iso: string) {
   const d = new Date(iso);
   return d
@@ -16,6 +18,7 @@ function formatHour(iso: string) {
     .toLowerCase();
 }
 
+// Rendering a scrollable list of hourly weather prediction
 export default function HourlyForecast({ hours, unit }: Props) {
   return (
     <div className="hourly-forecast">

@@ -1,21 +1,27 @@
 import type { WeatherBundle, SavedLocation } from "../types/weather";
 
+// initializing API key
 let API_KEY = sanitizeApiKey(import.meta.env.VITE_WEATHERAPI_KEY);
 
+// base URL for API requests
 const API_BASE = "https://api.weatherapi.com/v1";
 
+// Trimming and removing wrapping quotes
 function sanitizeApiKey(key: string | undefined) {
   return (key ?? "").trim().replace(/^"(.+)"$/, "$1");
 }
 
+// Setting new API
 export function setApiKey(key: string) {
   API_KEY = sanitizeApiKey(key);
 }
 
+// Checking if valid API is present
 export function hasApiKey(): boolean {
   return Boolean(API_KEY && API_KEY.trim().length > 0);
 }
 
+// Throwing error when API key is missing
 class MissingApiKeyError extends Error {
   constructor() {
     super("WeatherAPI key is missing. Add VITE_WEATHERAPI_KEY to your .env file.");
@@ -23,11 +29,13 @@ class MissingApiKeyError extends Error {
   }
 }
 
+// Helper ensuring API key exists before making requests
 function requireKey() {
   if (!hasApiKey()) throw new MissingApiKeyError();
   return API_KEY as string;
 }
 
+// Interface for raw location search results
 interface RawSearchResult {
   name: string;
   region?: string;
@@ -36,6 +44,7 @@ interface RawSearchResult {
   lon: number;
 }
 
+// Searching for location by matching string
 export async function searchLocations(query: string): Promise<SavedLocation[]> {
   if (!query.trim()) return [];
   const key = requireKey();
@@ -57,6 +66,7 @@ export async function searchLocations(query: string): Promise<SavedLocation[]> {
   }));
 }
 
+// Perfoming reverse geocoding to get location from coordnates
 export async function reverseGeocode(lat: number, lon: number): Promise<{ name: string; country: string }> {
   try {
     const key = requireKey();
@@ -72,12 +82,15 @@ export async function reverseGeocode(lat: number, lon: number): Promise<{ name: 
   }
 }
 
+// Weather condition interface
 interface RawCondition {
   text: string;
   icon: string;
   code: number;
 }
 
+
+// Current weather data structure
 interface RawCurrentResponse {
   last_updated_epoch: number;
   temp_c: number;
@@ -88,6 +101,7 @@ interface RawCurrentResponse {
   pressure_mb?: number;
 }
 
+// Hourly forecast structure
 interface RawForecastHour {
   time_epoch: number;
   temp_c: number;
@@ -99,6 +113,7 @@ interface RawForecastHour {
   pressure_mb?: number;
 }
 
+// Daily forecast structure from API response
 interface RawForecastDay {
   date: string;
   day: {
@@ -111,12 +126,15 @@ interface RawForecastDay {
   hour: RawForecastHour[];
 }
 
+
+// Full weather response structure
 interface RawWeatherResponse {
   location: { tz_id: string };
   current: RawCurrentResponse;
   forecast: { forecastday: RawForecastDay[] };
 }
 
+// Function to fetch weather and forecast bundle for coordinates given
 export async function fetchWeather(lat: number, lon: number): Promise<WeatherBundle> {
   const key = requireKey();
   const url = `${API_BASE}/forecast.json?key=${key}&q=${lat},${lon}&days=6&aqi=no&alerts=no`;
@@ -192,6 +210,7 @@ export async function fetchWeather(lat: number, lon: number): Promise<WeatherBun
   };
 }
 
+// Convertin Celsius to Fahrenheit
 export function celsiusToFahrenheit(c: number): number {
   return Math.round((c * 9) / 5 + 32);
 }
